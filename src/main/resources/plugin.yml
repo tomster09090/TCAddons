@@ -1,0 +1,8 @@
+name: TCExtra
+version: ${project.version}
+main: euromagic.eu.tcextra.TCExtra
+api-version: 1.18
+prefix: TCADDONS
+authors: [ EuroMagicDevelopmentTeam ]
+description: TCExtra
+website: https://www.euromagic.eu/
