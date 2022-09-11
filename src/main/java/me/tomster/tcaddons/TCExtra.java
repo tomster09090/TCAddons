@@ -1,8 +1,7 @@
-package euromagic.eu.tcextra;
+package me.tomster.tcaddons;
 
 import com.bergerkiller.bukkit.tc.signactions.SignAction;
-import euromagic.eu.tcextra.signactions.SignActionMoney;
-import org.bukkit.block.Sign;
+import me.tomster.tcaddons.signactions.SignActionMoney;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class TCExtra extends JavaPlugin {

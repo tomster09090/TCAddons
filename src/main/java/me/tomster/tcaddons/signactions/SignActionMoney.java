@@ -1,4 +1,4 @@
-package euromagic.eu.tcextra.signactions;
+package me.tomster.tcaddons.signactions;
 
 import com.bergerkiller.bukkit.tc.controller.MinecartGroup;
 import org.bukkit.Bukkit;
@@ -18,20 +18,20 @@ public class SignActionMoney extends SignAction {
 
     @Override
     public boolean match(SignActionEvent info) {
-        // Checks that the second line starts with 'welcome' (case-insensitive)
+        // Checks that the second line starts with 'money' (case-insensitive)
         return info.isType("money");
     }
 
     @Override
     public void execute(SignActionEvent info) {
-        // When a [train] sign is placed, activate when powered by redstone when the train
-        // goes over the sign, or when redstone is activated.
+        /* When a [train] sign is placed, activate when powered by redstone when the train
+        goes over the sign, or when redstone is activated.*/
         if (info.isTrainSign()
                 && info.isAction(SignActionType.GROUP_ENTER, SignActionType.REDSTONE_ON)
                 && info.isPowered() && info.hasGroup()
         ) {
             for (MinecartMember<?> member : info.getGroup()){
-                sendGreetingForCart(info, member);
+                playPlayersInCart(info, member);
             }
             return;
         }
@@ -42,12 +42,12 @@ public class SignActionMoney extends SignAction {
                 && info.isAction(SignActionType.MEMBER_ENTER, SignActionType.REDSTONE_ON)
                 && info.isPowered() && info.hasMember()
         ) {
-            sendGreetingForCart(info, info.getMember());
+            playPlayersInCart(info, info.getMember());
             return;
         }
     }
 
-    public void sendGreetingForCart(SignActionEvent info, MinecartMember<?> member) {
+    public void playPlayersInCart(SignActionEvent info, MinecartMember<?> member) {
         // Lines 3 and 4 configure the message to send
         String message = info.getLine(2) + info.getLine(3);
 
@@ -62,7 +62,7 @@ public class SignActionMoney extends SignAction {
         // For simplicity you can use the SignBuildOptions API for this.
         // You are free to use your own code here that checks permissions/etc.
         return SignBuildOptions.create()
-                .setName(event.isCartSign() ? "cart money distributor" : "train money distributor")
+                .setName(event.isCartSign() && event.isRCSign() ? "cart money distributor" : "train money distributor")
                 .setDescription("pays all players within the train/cart a specified amount")
                 .handle(event.getPlayer());
     }
