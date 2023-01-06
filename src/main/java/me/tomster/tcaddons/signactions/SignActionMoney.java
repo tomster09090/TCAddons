@@ -1,58 +1,30 @@
 package me.tomster.tcaddons.signactions;
 
-import com.bergerkiller.bukkit.tc.controller.MinecartGroup;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import com.bergerkiller.bukkit.tc.controller.MinecartMember;
+import com.bergerkiller.bukkit.tc.Permission;
+import com.bergerkiller.bukkit.tc.TrainCarts;
+import net.milkbowl.vault.economy.Economy;
 import com.bergerkiller.bukkit.tc.events.SignActionEvent;
 import com.bergerkiller.bukkit.tc.events.SignChangeActionEvent;
 import com.bergerkiller.bukkit.tc.signactions.SignAction;
-import com.bergerkiller.bukkit.tc.signactions.SignActionType;
 import com.bergerkiller.bukkit.tc.utils.SignBuildOptions;
-
-/**
- * Displays a welcome message to the players in the train
- */
 public class SignActionMoney extends SignAction {
 
     @Override
-    public boolean match(SignActionEvent info) {
-        // Checks that the second line starts with 'money' (case-insensitive)
-        return info.isType("money");
-    }
+    public boolean match(SignActionEvent info) { return info.isType("money");  }
 
     @Override
     public void execute(SignActionEvent info) {
-        /* When a [train] sign is placed, activate when powered by redstone when the train
-        goes over the sign, or when redstone is activated.*/
-        if (info.isTrainSign()
-                && info.isAction(SignActionType.GROUP_ENTER, SignActionType.REDSTONE_ON)
-                && info.isPowered() && info.hasGroup()
-        ) {
-            for (MinecartMember<?> member : info.getGroup()){
-                playPlayersInCart(info, member);
-            }
-            return;
-        }
-
-        // When a [cart] sign is placed, activate when powered by redstone when each cart
-        // goes over the sign, or when redstone is activated.
-        if (info.isCartSign()
-                && info.isAction(SignActionType.MEMBER_ENTER, SignActionType.REDSTONE_ON)
-                && info.isPowered() && info.hasMember()
-        ) {
-            playPlayersInCart(info, info.getMember());
-            return;
-        }
+        payPlayersInCart(info);
     }
 
-    public void playPlayersInCart(SignActionEvent info, MinecartMember<?> member) {
-        // Lines 3 and 4 configure the message to send
-        String message = info.getLine(2) + info.getLine(3);
+    public void payPlayersInCart(SignActionEvent info ) {
+        // Line 3 configured to read out money values.
+        int moneyamount = Integer.parseInt(info.getLine(3));
 
-        // Send to all player passengers of the cart (could be multiple seats!)
-        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "eco give " + member.getLocalizedName() + " " + info.getLine(2));
+        // Send to all player passengers of the cart
+        // Set up vault economy to be able to pay players within a train.
+        Economy eco = TrainCarts.plugin.getEconomy();
+        eco.bankDeposit(info.getMember().getLocalizedName(), moneyamount);
     }
 
     @Override
@@ -62,8 +34,14 @@ public class SignActionMoney extends SignAction {
         // For simplicity you can use the SignBuildOptions API for this.
         // You are free to use your own code here that checks permissions/etc.
         return SignBuildOptions.create()
-                .setName(event.isCartSign() && event.isRCSign() ? "cart money distributor" : "train money distributor")
-                .setDescription("pays all players within the train/cart a specified amount")
+                .setPermission(String.valueOf(Permission.valueOf("BUILD_MONEY")))
+                .setName("money sign")
+                .setDescription("pays players within a train")
+                .setTraincartsWIKIHelp("github.io/tomster09090/TCCAddons/Readme.md")
                 .handle(event.getPlayer());
     }
-}
+/*
+    public TrainCarts getTrainCarts() {
+        return TrainCarts.plugin;
+    }
+*/}

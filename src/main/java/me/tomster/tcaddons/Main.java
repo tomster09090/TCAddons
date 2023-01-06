@@ -4,7 +4,7 @@ import com.bergerkiller.bukkit.tc.signactions.SignAction;
 import me.tomster.tcaddons.signactions.SignActionMoney;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class TCExtra extends JavaPlugin {
+public final class Main extends JavaPlugin {
 
     public final SignActionMoney signActionMoney = new SignActionMoney();
 

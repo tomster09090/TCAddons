@@ -4,20 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>euromagic.eu</groupId>
-    <artifactId>TCExtra</artifactId>
+    <groupId>me.tomster</groupId>
+    <artifactId>TCAddons</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>TCExtra</name>
+    <name>TCAddons</name>
 
-    <description>TCExtra</description>
+    <description>TCAddons</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <url>https://www.euromagic.eu/</url>
-
     <build>
         <plugins>
             <plugin>
@@ -67,6 +65,10 @@
             <id>mg-repo</id>
             <url>https://ci.mg-dev.eu/plugin/repository/everything</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -85,8 +87,17 @@
         <dependency>
             <groupId>com.bergerkiller.bukkit</groupId>
             <artifactId>TrainCarts</artifactId>
-            <version>1.18.1-v2</version>
+            <version>1.19.2-v1</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Vault (optional) for Economy integration -->
+        <dependency>
+            <groupId>com.github.MilkBowl</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 </project>
